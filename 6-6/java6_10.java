@@ -1,32 +1,54 @@
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import javax.script.ScriptEngine;
 public class java6_10 {
-    public static boolean formula(String str)
-    {
-        String[] params = str.split("=");
-        String a, b;
-        if (params.length < 2)
-            return false;
-	    ScriptEngineManager manager = new ScriptEngineManager();
-        ScriptEngine engine = manager.getEngineByName("javascript");
-	    try {
-			a = engine.eval(params[0]).toString(); // for first
-		} catch (ScriptException e) {
-			return false;
-		}
-        for (int i=1; i<params.length; i++) {
-            try {
-                b = engine.eval(params[i]).toString(); // others
-            } catch (ScriptException e) {
-                return false;
+    public static boolean formula(int n) {
+        String str = "" + n;
+        String newstr1="";
+        String newstr2="";
+        int a = 0;
+        String newstr3 = "";
+        while (str.length() > 1) {
+            if(str.length()%2!=0)
+            {
+                newstr1 = str.substring(0,(int)str.length()/2+1);
+                a = newstr1.length();
+                while (a!=0) 
+                {
+                    a--;
+                    newstr2 += newstr1.charAt(a);
+                }                
+                if(newstr2.equals(str.substring((int)str.length()/2)))
+                    return true;
+                else
+                    return false;
             }
-            if (!a.equals(b)) // if not equals
-                return false;
+            else
+            {
+                newstr1 = str.substring(0,str.length()/2);
+                a = newstr1.length();
+                while (a!=0) 
+                {
+                    a--;
+                    newstr2 += newstr1.charAt(a);
+                }
+                if(newstr2.equals(str.substring((int)str.length()/2)))
+                    return true;
+                else
+                {
+                    for (int i=0; i<str.length(); i+=2) 
+                    {
+                        newstr3 += Integer.toString(Integer.parseInt(str.substring(i,i+1)) + Integer.parseInt(str.substring(i+1,i+2)));
+                    }
+                    str = newstr3;
+                }
+                newstr1 = "";
+                newstr2 = "";
+                newstr3 = "";
+                a=0;
+            }
         }
         return true;
     }
+
     public static void main(String[] args) {
-        System.out.println(formula("12 = 7 + 5 = 6 * 1"));
+        System.out.println(formula(123312));
     }
 }

@@ -1,17 +1,32 @@
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import javax.script.ScriptEngine;
 public class java6_9 {
-    public static int bell(int n) {
-        int[][] Bel = new int[n + 1][n + 1];
-        Bel[0][0] = 1;
-        for (int i = 1; i <= n; i++) {
-            Bel[i][0] = Bel[i - 1][i - 1];
-            for (int j = 1; j <= i; j++) {
-                Bel[i][j] = Bel[i-1][j-1]+Bel[i][j-1];
+    public static boolean formula(String str)
+    {
+        String[] params = str.split("=");
+        String a, b;
+        if (params.length < 2)
+            return false;
+	    ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("javascript");
+	    try {
+			a = engine.eval(params[0]).toString(); // for first
+		} catch (ScriptException e) {
+			return false;
+		}
+        for (int i=1; i<params.length; i++) {
+            try {
+                b = engine.eval(params[i]).toString(); // others
+            } catch (ScriptException e) {
+                return false;
             }
+            if (!a.equals(b)) // if not equals
+                return false;
         }
-        return Bel[n][0];
+        return true;
     }
-
     public static void main(String[] args) {
-        System.out.println(bell(0));
+        System.out.println(formula("12 = 7 + 5 = 6 * 1"));
     }
 }
